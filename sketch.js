@@ -4,13 +4,15 @@ let mirror
 let sound
 let aperture
 let mask
+let offset_x
+let offset_y
+let queen = false
 
 function preload() {
 
-
 mirror = loadImage('mirror_f.png')
-aperture = loadImage('aperture.jpg')
-mask = loadImage('evilqueen.gif')
+aperture = loadImage('aperture.png')
+mask = loadImage('evilqueen.png')
 
 }
 
@@ -24,57 +26,67 @@ function setup() {
     tracker = new clm.tracker()
     tracker.init()
     tracker.start(capture.elt)    
-
 }
 
 
 function draw() {  
 
-    image(capture, 150, -50, capture.width, capture.height)
-    image(aperture, -30, 0, 1248, 796)
-
-    image(mirror, 250, 0, 700, 800)
-
-
     let positions = tracker.getCurrentPosition()
-    //print(positions)
+    let i = 0
+        while (i < positions.length - 1) {
 
-//face lines
-    // noStroke()
-    // stroke(255)
-    // strokeWeight(3)
-    // fill(255)
-//FACE CONNECT DOTS
-    // let i = 0
-    // while (i < positions.length - 1) {
+            ellipse(positions[i][0], positions[i][1], 4, 4)
+            text(i, positions[i][0], positions[i][1])
+            line(positions[i][0], positions[i][1], positions[i+1][0], positions[i+1][1])
+            i += 1
+        }
+    offset_x = 10
+    offset_y = -50
+    image(capture, offset_x, offset_y, capture.width, capture.height)
 
-    //     ellipse(positions[i][0], positions[i][1], 4, 4)
-    //     text(i, positions[i][0], positions[i][1])
-    //      line(positions[i][0], positions[i][1], positions[i+1][0], positions[i+1][1])
-    //     i += 1
-    }
-
-//EYE DOTS
     if (positions.length > 0) {
+    let noseX = positions[62][0]
+    let noseY = positions[62][1]
 
-        push()
-        image(mask, x_face, y_face)
-        pop()
+    let face_left_x = positions[1][0]
+    let face_left_y = positions[1][1]
 
-        let x_face = positions[23][0]
-        let y_face = positions[24][1]
+    let face_right_x = positions[13][0]
+    let face_right_y = positions[13][1]
 
+    let face_width = dist(face_left_x, face_left_y, face_right_x, face_right_y)
+
+    let ratio = mask.height / mask.width
+    let w = (face_width * 2.75)
+    let h = w * ratio
+
+
+    if (queen == false) {
+        image(mask, noseX - w/2 + offset_x, noseY - h/2 + offset_y, w, h)
+    }
+   
     }
 
+    image(aperture, -155, 0, 1248, 796)
+
+    image(mirror, 100, 0, 700, 800)
+
+    // print(positions)
+
+}
 
 function mousePressed() {
     if (sound.isPlaying()) {
         sound.stop();
-        //mask still on;
+        queen = false
     } else {
         sound.play();
-        //background and mask go away
+        sound.onended(queenSoundEnded)
     }
+}
+
+function queenSoundEnded() {
+    queen = true
 }
 
 function mouseClicked() {
