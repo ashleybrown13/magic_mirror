@@ -13,6 +13,7 @@ function preload() {
 mirror = loadImage('mirror_f.png')
 aperture = loadImage('aperture.png')
 mask = loadImage('evilqueen.png')
+myFont = loadFont('font.ttf')
 
 }
 
@@ -29,8 +30,7 @@ function setup() {
 }
 
 
-function draw() {  
-
+function draw() { 
     let positions = tracker.getCurrentPosition()
     let i = 0
         while (i < positions.length - 1) {
@@ -71,6 +71,11 @@ function draw() {
 
     image(mirror, 100, 0, 700, 800)
 
+    textFont(myFont);
+    stroke(71, 170, 199) 
+    fill(98, 183, 208)
+    textSize(45);
+    text('Mirror, Mirror', 10, 45);
     // print(positions)
 
 }
