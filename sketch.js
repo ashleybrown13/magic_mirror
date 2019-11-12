@@ -14,12 +14,16 @@ mirror = loadImage('mirror_f.png')
 aperture = loadImage('aperture.png')
 mask = loadImage('evilqueen.png')
 myFont = loadFont('font.ttf')
+smoke = loadImage('fog-lowG.png')
+smoke2 = loadImage('smoke3G.png')
+smoke3 = loadImage('smoke2G.png')
+sound = loadSound('evil-queen.mp3')
 
 }
 
 function setup() {
-    sound = loadSound('evil-queen.mp3')
-    createCanvas(1207, 794)
+    let canvas = createCanvas(1093, 794)
+    canvas.parent('p5')
     capture = createCapture(VIDEO)
     capture.size(800, 800)
     capture.hide()
@@ -31,6 +35,7 @@ function setup() {
 
 
 function draw() { 
+
     let positions = tracker.getCurrentPosition()
     let i = 0
         while (i < positions.length - 1) {
@@ -67,7 +72,11 @@ function draw() {
    
     }
 
+ 
     image(aperture, -155, 0, 1248, 796)
+    image(smoke, -20, 640)
+    image(smoke2, -20, -30, smoke2.width/6, smoke2.height/6)
+    image(smoke3, 685, 100, smoke3.width/4, smoke3.height/4)
 
     image(mirror, 100, 0, 700, 800)
 
